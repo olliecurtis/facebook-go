@@ -12,4 +12,3 @@ To build the application run the following command
 To run the built application run the following command
 
         ./facebook-go
-
