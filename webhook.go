@@ -59,15 +59,13 @@ func Verify(w http.ResponseWriter, r *http.Request) {
 			reply.Sender, reply.Recipient = reply.Recipient, reply.Sender
 			fmt.Println(input.Entry[0].Messaging[0].Message.Text)
 
-			// if resp, err := getDialogflow(*input); err == nil {
-			reply.Message.Text = "Hello Ollie"
+			reply.Message.Text = input.Entry[0].Messaging[0].Message.Text
 			reply.Message.Seq = 0 //these fields are not used so remove them with omit empty
 			reply.Message.Mid = ""
 
 			b, _ := json.Marshal(reply)
 			url := fmt.Sprintf("https://graph.facebook.com/v2.6/me/messages?access_token=%s", PAGE_TOKEN)
 			http.Post(url, "application/json", bytes.NewReader(b))
-			// }
 			return
 		}
 	}
@@ -75,20 +73,4 @@ func Verify(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/plain")
 	w.WriteHeader(400)
 	fmt.Fprintf(w, "Bad Request")
-}
-
-type ApiAiInput struct {
-	Status struct {
-		Code      int
-		ErrorType string
-	}
-	Result struct {
-		Action           *string
-		ActionIncomplete bool
-		Speech           string
-	} `json:"result"`
-}
-
-func getDialogflow(m MessengerInput) (resp string, err error) {
-	return
 }
